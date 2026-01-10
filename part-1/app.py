@@ -62,14 +62,55 @@ def index():
 @app.route('/add')
 def add_sample_student():
     """Add a sample student to database (for testing)"""
+    
     conn = get_db_connection()
+
     conn.execute(
         'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
-        ('John Doe', 'john@example.com', 'Python')  # ? are placeholders (safe from SQL injection)
+        ('Dipika Nagargoje', 'dipika@example.com', 'Deep Learning')
     )
-    conn.commit()  # Don't forget to commit!
+
+    conn.execute(
+        'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
+        ('Aditi Gite', 'aditi@gmail.com', 'Java')
+    )
+
+    conn.execute(
+        'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
+        ('Sneha Chaudhari', 'sneha@gmail.com', 'FullStack development')
+    )
+
+    conn.execute(
+        'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
+        ('Shraddha Surwade', 'shraddha@gmail.com', 'Cloud Computing')
+    )
+
+    conn.commit()
     conn.close()
-    return 'Student added! <a href="/">Go back to home</a>'
+
+    return 'Students added successfully! <a href="/">Go back to home</a>'
+
+#if i add mutliple student at a time then i use list
+
+#@app.route('/add')
+#def add_multiple_students():
+#    conn = get_db_connection()
+#
+#    students = [
+#       ('Dipika Nagargoje', 'dipika@example.com', 'Deep Learning'),
+#        ('Sneha Chaudhari', 'sneha@gmail.com', 'Full Stack Development')
+#    ]
+#
+#    conn.executemany(
+#       'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
+#        students
+#    )
+
+#    conn.commit()
+#    conn.close()
+
+#    return 'Multiple students added successfully!'
+
 
 
 if __name__ == '__main__':
@@ -108,3 +149,4 @@ if __name__ == '__main__':
 # different names!
 #
 # =============================================================================
+

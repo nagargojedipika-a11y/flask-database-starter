@@ -54,6 +54,18 @@ def add_student():
         course = request.form['course']
 
         conn = get_db_connection()
+
+         # 🔍 Check if email already exists
+        existing = conn.execute(
+            'SELECT * FROM students WHERE email = ?',
+            (email,)
+        ).fetchone()
+
+        if existing:
+            conn.close()
+            flash('Email already exists!', 'danger')
+            return redirect(url_for('add_student'))
+
         conn.execute(
             'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
             (name, email, course)
@@ -73,8 +85,16 @@ def add_student():
 
 @app.route('/')
 def index():
+    search=request.args.get('search')
     conn = get_db_connection()
-    students = conn.execute('SELECT * FROM students ORDER BY id DESC').fetchall()  # Newest first
+    if search:
+        students=conn.execute(
+            "SELECT * from students where name like? order by id desc",
+            ('%'+search+'%',)
+        ).fetchall()
+    else:
+        students = conn.execute('SELECT * FROM students ORDER BY id DESC').fetchall()  # Newest first
+    
     conn.close()
     return render_template('index.html', students=students)
 
