@@ -11,7 +11,7 @@ Flask-SQLAlchemy ORM integration with models and relationships
 
 ## Prerequisites
 - Complete part-1 and part-2
-- Install: `pip install flask-sqlalchemy`
+- Install: `pip install flask-sqlalychem`
 
 ## How to Run
 ```bash
