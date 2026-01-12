@@ -84,6 +84,11 @@ def add_sample_student():
         'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
         ('Shraddha Surwade', 'shraddha@gmail.com', 'Cloud Computing')
     )
+    conn.execute(
+        'INSERT INTO students (name, email, course) VALUES (?, ?, ?)',
+        ('Akanksha Matkar', 'akanksha@gmail.com', 'Computer Science')
+    )
+
 
     conn.commit()
     conn.close()
