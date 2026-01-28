@@ -225,6 +225,7 @@ def add_teacher():
 def init_db():
     """Create tables and add sample courses if empty"""
     with app.app_context():
+        db.drop_all()
         db.create_all()  # Create all tables based on models
 
         # Add sample courses if none exist

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Author & Book Dashboard</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2f7, #f9fbfd);
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1f3b73, #2c5aa0);
+            color: #fff;
+            padding: 20px 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tabs {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .tabs button {
+            padding: 10px 26px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            margin: 0 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .tabs button.active {
+            background: #1f3b73;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(31,59,115,0.4);
+        }
+
+        .tabs button:not(.active) {
+            background: #e0e6f0;
+            color: #1f3b73;
+        }
+
+        .section {
+            display: none;
+            background: #ffffff;
+            margin: 25px auto;
+            padding: 25px;
+            border-radius: 14px;
+            max-width: 1150px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .toolbar button {
+            background: linear-gradient(135deg, #1f3b73, #2c5aa0);
+            color: #fff;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toolbar button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+        }
+
+        .toolbar input,
+        .toolbar select {
+            padding: 9px;
+            border: 1px solid #d0d7e2;
+            border-radius: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #1f3b73;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f7f9fc;
+        }
+
+        tr:hover {
+            background: #eef3fb;
+        }
+
+        td button {
+            padding: 6px 12px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            color: #fff;
+        }
+
+        td button:first-child {
+            background: #27ae60;
+        }
+
+        td button:last-child {
+            background: #e74c3c;
+        }
+
+        td button:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+        }
+
+        .form-card {
+            background: linear-gradient(135deg, #162447, #1f4068);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .form-card h3 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row input,
+        .form-row select {
+            flex: none;
+            width: 200px;
+        }
+
+        .form-row button {
+            white-space: nowrap;
+            background: #1dd1a1;
+            color: #000;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .form-row button:hover {
+            opacity: 0.9;
+        }
+
+        #books-section .book-form-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #books-section .book-form-row input {
+            flex: 0 0 230px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        #books-section .book-form-row select {
+            flex: 0 0 230px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        #authors-section .form-row input {
+            flex: none;
+            width: 300px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HIDDEN INPUTS for JS form handling -->
+    <input type="hidden" id="authorId">
+    <input type="hidden" id="bookId">
+
+    <header style="display:flex; justify-content:space-between; align-items:center; padding:18px 20px; background:#1f3b73; color:#fff;">
+        <h1 style="margin:0; font-size:1.5rem;">Author & Book Management Dashboard</h1>
+
+        <div id="dashboard-stats" style="display:flex; gap:15px; align-items:center;">
+            <div style="background:#fff; color:#1f3b73; padding:10px 15px; border-radius:6px; text-align:center; min-width:90px;">
+                <h3 id="totalAuthors" style="margin:0;">0</h3>
+                <p style="margin:0; font-size:0.8rem;">Authors</p>
+            </div>
+            <div style="background:#fff; color:#27ae60; padding:10px 15px; border-radius:6px; text-align:center; min-width:90px;">
+                <h3 id="totalBooks" style="margin:0;">0</h3>
+                <p style="margin:0; font-size:0.8rem;">Books</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <button id="authors-tab" class="active" onclick="showSection('authors')">Authors</button>
+        <button id="books-tab" onclick="showSection('books')">Books</button>
+    </div>
+
+    <!-- AUTHORS -->
+    <div id="authors-section" class="section active">
+        <h2>Authors</h2>
+        <div class="form-card">
+            <h3>Add New Author</h3>
+            <div class="form-row">
+                <input id="authorName" placeholder="Author Name">
+                <input id="authorCity" placeholder="City">
+                <input id="authorBio" placeholder="Bio">
+                <button onclick="saveAuthor()">Add Author</button>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <input id="author-search" placeholder="Search author...">
+            <button onclick="loadAuthors()">Search</button>
+            <select onchange="sortAuthors(this.value)">
+                <option value="">Sort</option>
+                <option value="name">By Name</option>
+                <option value="city">By City</option>
+            </select>
+        </div>
+
+        <table id="authors-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Bio</th>
+                    <th>City</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="author-empty" style="display:none; color:#000000; text-align:center; margin-top:12px;">
+            ❌ No author found
+        </div>
+    </div>
+
+    <!-- BOOKS -->
+    <div id="books-section" class="section">
+        <h2>Books</h2>
+        <div class="form-card">
+            <h3>Add New Book</h3>
+            <div class="form-row book-form-row">
+                <input id="bookTitle" placeholder="Book Title">
+                <input id="bookYear" placeholder="Year">
+                <input id="bookIsbn" placeholder="ISBN">
+                <select id="bookAuthor">
+                    <option value="">Select Author</option>
+                </select>
+                <button onclick="saveBook()">Add Book</button>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <input id="book-search" placeholder="Search book...">
+            <button onclick="loadBooks()">Search</button>
+            <select onchange="sortBooks(this.value)">
+                <option value="">Sort</option>
+                <option value="title">By Title</option>
+                <option value="year">By Year</option>
+            </select>
+        </div>
+
+        <table id="books-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>ISBN</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="book-empty" style="display:none; color:#000000; margin-top:8px;">
+                ❌ No book found
+        </div>
+    </div>
+
+    <script src="/code.js"></script>
+</body>
+</html>
